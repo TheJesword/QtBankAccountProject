@@ -16,6 +16,7 @@ public:
     explicit Window(QWidget *parent = nullptr);
 
 private:
+
     // PushButton objects
     QPushButton * savingsButton;
     QPushButton * checkingsButton;
@@ -23,6 +24,7 @@ private:
     QPushButton * depositButton;
     QPushButton * withdrawButton;
     QPushButton * historyButton;
+    QPushButton * okButton;
 
     // QLabel objects
     QLabel * userNameLabel;
@@ -30,14 +32,22 @@ private:
     QLabel * balanceLabel;
     QLabel * userNameDisplay;
     QLabel * accountNumberDisplay;
-    QLabel * balanceDisplay;
-
-    // Windows
-    void NewSavingsWindow();
+   // QLabel * balanceDisplay;
+    QLabel * messageLabel;
 
 
 private slots:
-    void savingsButtonSlot();
+    void savingsButtonWindow();
+    void checkingsWindow();
+    void depositWindow();
+    void depositSavingsWindow();
+    void depositCheckingsWindow();
+    void withdrawWindow();
+    void withdrawCheckingsWindow();
+    void withdrawSavingsWindow();
+    void transferWindow();
+    void historyWindow();
+
 };
 
 #endif // WINDOW_H
