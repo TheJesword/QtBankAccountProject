@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QString>
 
+
 class QPushButton;
 class Window : public QMainWindow
 {
@@ -31,9 +32,12 @@ private:
     QLabel * accountNumberDisplay;
     QLabel * balanceDisplay;
 
-signals:
+    // Windows
+    void NewSavingsWindow();
 
-public slots:
+
+private slots:
+    void savingsButtonSlot();
 };
 
 #endif // WINDOW_H
