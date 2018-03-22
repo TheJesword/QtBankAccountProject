@@ -1,10 +1,11 @@
 #include "window.h"
 
+
 Window::Window(QWidget *parent) : QMainWindow(parent)
 {
     QString userName = "Heck Yeah";
-    unsigned int accountNumber = 0;
-   // double balance = 0;
+    //unsigned int accountNumber = 0;
+    //double balance = 0;
 
     setFixedSize(1000,500);
 
@@ -27,9 +28,10 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
 
     accountNumberDisplay = new QLabel(this);
     accountNumberDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    accountNumberDisplay->setText(QString::number(accountNumber));
+    accountNumberDisplay->setText(QString::number(user.getCheckingAccountNumber()));
     accountNumberDisplay->setGeometry(480,100,100,30);
 
+    //QString::number(accountNumber)
 
     //----------- Push buttons objects on Main Window ------------------
     savingsButton = new QPushButton("Savings Account", this);
@@ -182,6 +184,7 @@ void Window::withdrawWindow()
 
     withdrawWindow->show();
 }
+
 
 void Window::withdrawCheckingsWindow()
 {
