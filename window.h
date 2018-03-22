@@ -6,7 +6,8 @@
 #include <QPUshButton>
 #include <QLabel>
 #include <QString>
-
+#include "user.h"
+using namespace std;
 
 class QPushButton;
 class Window : public QMainWindow
@@ -34,6 +35,9 @@ private:
     QLabel * accountNumberDisplay;
    // QLabel * balanceDisplay;
     QLabel * messageLabel;
+
+    // user object
+    User user;
 
 
 private slots:
