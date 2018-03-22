@@ -44,6 +44,7 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
     //----------- Push buttons objects ------------------
     savingsButton = new QPushButton("Savings Account", this);
     savingsButton->setGeometry(75,300,120,30);
+    connect(savingsButton, SIGNAL (pressed()), this, SLOT (savingsButtonSlot()));
 
     checkingsButton = new QPushButton("Checkings Account", this);
     checkingsButton->setGeometry(75,350,120,30);
@@ -54,9 +55,29 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
     depositButton = new QPushButton("Deposit", this);
     depositButton->setGeometry(800,350,120,30);
 
-    withdrawButton = new QPushButton("Withdraw", this);
-    withdrawButton->setGeometry(800,300,120,30);
-
     historyButton = new QPushButton("Transaction History", this);
     historyButton->setGeometry(800,400,120,30);
+
+
 }
+
+void Window::savingsButtonSlot()
+{
+    NewSavingsWindow();
+}
+
+void Window::NewSavingsWindow()
+{
+        // Creating the new window
+      QWidget * savingsWindow = new QWidget;
+      savingsWindow->setFixedSize(1000,500);
+
+      // creating the button to display in the new window
+      withdrawButton = new QPushButton("Withdraw", savingsWindow);
+      withdrawButton->setGeometry(800,300,120,30);
+
+      // display both button and window
+      savingsWindow->show();
+      withdrawButton->show();
+}
+
