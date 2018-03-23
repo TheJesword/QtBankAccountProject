@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QString>
 #include "user.h"
-using namespace std;
+
 
 class QPushButton;
 class Window : public QMainWindow
@@ -19,38 +19,42 @@ public:
 private:
 
     // PushButton objects
-    QPushButton * savingsButton;
     QPushButton * checkingsButton;
-    QPushButton * transferButton;
     QPushButton * depositButton;
-    QPushButton * withdrawButton;
+    QPushButton * depositSavingsButton;
+    QPushButton * depositCheckingsButton;
     QPushButton * historyButton;
     QPushButton * okButton;
+    QPushButton * savingsButton;
+    QPushButton * transferButton;
+    QPushButton * withdrawButton;
+    QPushButton * withdrawSavingsButton;
+    QPushButton * withdrawCheckingsButton;
 
     // QLabel objects
-    QLabel * userNameLabel;
     QLabel * accountNumberLabel;
-    QLabel * balanceLabel;
-    QLabel * userNameDisplay;
     QLabel * accountNumberDisplay;
-   // QLabel * balanceDisplay;
-    QLabel * messageLabel;
+    QLabel * balanceLabel;
+    QLabel * balanceDisplay;
+    QLabel * depositMessageLabel;
+    QLabel * userNameDisplay;
+    QLabel * userNameLabel;
+    QLabel * withdrawMessageLabel;
 
-    // user object
     User user;
 
 
 private slots:
     void savingsButtonWindow();
-    void checkingsWindow();
-    void depositWindow();
-    void depositSavingsWindow();
-    void depositCheckingsWindow();
-    void withdrawWindow();
-    void withdrawCheckingsWindow();
-    void withdrawSavingsWindow();
-    void transferWindow();
-    void historyWindow();
+    void checkingsButtonWindow();
+    void depositButtonWindow();
+    void depositSavingsButtonWindow();
+    void depositCheckingsButtonWindow();
+    void withdrawButtonWindow();
+    void withdrawCheckingsButtonWindow();
+    void withdrawSavingsButtonWindow();
+    void transferButtonWindow();
+    void historyButtonWindow();
 
 };
 

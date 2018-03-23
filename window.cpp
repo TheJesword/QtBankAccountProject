@@ -1,11 +1,11 @@
 #include "window.h"
 
-
 Window::Window(QWidget *parent) : QMainWindow(parent)
 {
+
     QString userName = "Heck Yeah";
-    //unsigned int accountNumber = 0;
-    //double balance = 0;
+   // unsigned int accountNumber = 0;
+   // double balance = 0;
 
     setFixedSize(1000,500);
 
@@ -31,7 +31,6 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
     accountNumberDisplay->setText(QString::number(user.getCheckingAccountNumber()));
     accountNumberDisplay->setGeometry(480,100,100,30);
 
-    //QString::number(accountNumber)
 
     //----------- Push buttons objects on Main Window ------------------
     savingsButton = new QPushButton("Savings Account", this);
@@ -40,19 +39,19 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
 
     checkingsButton = new QPushButton("Checkings Account", this);
     checkingsButton->setGeometry(75,350,120,30);
-    connect(checkingsButton, SIGNAL (pressed()), this, SLOT (checkingsWindow()));
+    connect(checkingsButton, SIGNAL (pressed()), this, SLOT (checkingsButtonWindow()));
 
     transferButton = new QPushButton("Transfer", this);
     transferButton->setGeometry(75,400,120,30);
-    connect(transferButton, SIGNAL (pressed()), this, SLOT (transferWindow()));
+    connect(transferButton, SIGNAL (pressed()), this, SLOT (transferButtonWindow()));
 
     depositButton = new QPushButton("Deposit", this);
     depositButton->setGeometry(800,350,120,30);
-    connect(depositButton, SIGNAL (pressed()), this, SLOT (depositWindow()));
+    connect(depositButton, SIGNAL (pressed()), this, SLOT (depositButtonWindow()));
 
     historyButton = new QPushButton("Transaction History", this);
     historyButton->setGeometry(800,400,120,30);
-    connect(historyButton, SIGNAL (pressed()), this, SLOT (historyWindow()));
+    connect(historyButton, SIGNAL (pressed()), this, SLOT (historyButtonWindow()));
 
     okButton = new QPushButton("Quit", this);
     okButton->setGeometry(450,400,60,30);
@@ -60,7 +59,7 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
 
     withdrawButton = new QPushButton("Withdraw", this);
     withdrawButton->setGeometry(800,300,120,30);
-    connect(withdrawButton, SIGNAL (pressed()), this, SLOT (withdrawWindow()));
+    connect(withdrawButton, SIGNAL (pressed()), this, SLOT (withdrawButtonWindow()));
 
 
 }
@@ -77,7 +76,7 @@ void Window::savingsButtonWindow()
   balanceLabel->setGeometry(375,130,100,30);
 
 
-  QLabel * balanceDisplay = new QLabel(savingsWindow);
+  balanceDisplay = new QLabel(savingsWindow);
   balanceDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   balanceDisplay->setText("$$$");
   balanceDisplay->setGeometry(490,130,100,30);
@@ -95,7 +94,7 @@ void Window::savingsButtonWindow()
   savingsWindow->show();
 }
 
-void Window::checkingsWindow()
+void Window::checkingsButtonWindow()
 {
     // Creating the new window
   QWidget * checkingsWindow = new QWidget;
@@ -109,24 +108,24 @@ void Window::checkingsWindow()
 
 }
 
-void Window::depositWindow()
+void Window::depositButtonWindow()
 {
     // Creating the new window
   QWidget * depositWindow = new QWidget;
   depositWindow->setFixedSize(1000,500);
 
-  QLabel * messageLabel = new QLabel(depositWindow);
-  messageLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  messageLabel->setText("Which account would you like to deposit money into?");
-  messageLabel->setGeometry(350,150,270,30);
+  depositMessageLabel = new QLabel(depositWindow);
+  depositMessageLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  depositMessageLabel->setText("Which account would you like to deposit money into?");
+  depositMessageLabel->setGeometry(350,150,270,30);
 
-  savingsButton = new QPushButton("Savings", depositWindow);
-  savingsButton->setGeometry(75,300,120,30);
-  connect(savingsButton, SIGNAL (pressed()), this, SLOT (depositSavingsWindow()));
+  depositSavingsButton = new QPushButton("Savings", depositWindow);
+  depositSavingsButton->setGeometry(75,300,120,30);
+  connect(depositSavingsButton, SIGNAL (pressed()), this, SLOT (depositSavingsButtonWindow()));
 
-  checkingsButton = new QPushButton("Checkings", depositWindow);
-  checkingsButton->setGeometry(800,300,120,30);
-  connect(checkingsButton, SIGNAL (pressed()), this, SLOT (depositCheckingsWindow()));
+  depositCheckingsButton = new QPushButton("Checkings", depositWindow);
+  depositCheckingsButton->setGeometry(800,300,120,30);
+  connect(depositCheckingsButton, SIGNAL (pressed()), this, SLOT (depositCheckingsButtonWindow()));
 
   okButton = new QPushButton("OK", depositWindow);
   okButton->setGeometry(450,400,60,30);
@@ -135,7 +134,7 @@ void Window::depositWindow()
   depositWindow->show();
 }
 
-void Window::depositSavingsWindow()
+void Window::depositSavingsButtonWindow()
 {
     // Creating the new window
   QWidget * depositSavingsWindow = new QWidget;
@@ -148,35 +147,35 @@ void Window::depositSavingsWindow()
   depositSavingsWindow->show();
 }
 
-void Window::depositCheckingsWindow()
+void Window::depositCheckingsButtonWindow()
 {
-    QWidget * depositeCheckingsWindow = new QWidget;
-    depositeCheckingsWindow->setFixedSize(1000,500);
+    QWidget * depositCheckingsWindow = new QWidget;
+    depositCheckingsWindow->setFixedSize(1000,500);
 
-    okButton = new QPushButton("OK", depositeCheckingsWindow);
+    okButton = new QPushButton("OK", depositCheckingsWindow);
     okButton->setGeometry(450,400,60,30);
-    connect(okButton, SIGNAL (pressed()), depositeCheckingsWindow, SLOT (close()));
+    connect(okButton, SIGNAL (pressed()), depositCheckingsWindow, SLOT (close()));
 
-    depositeCheckingsWindow->show();
+    depositCheckingsWindow->show();
 }
 
-void Window::withdrawWindow()
+void Window::withdrawButtonWindow()
 {
     QWidget * withdrawWindow = new QWidget;
     withdrawWindow->setFixedSize(1000,500);
 
-    QLabel * messageLabel = new QLabel(withdrawWindow);
-    messageLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    messageLabel->setText("Which account would you like to withdraw money from?");
-    messageLabel->setGeometry(350,150,270,30);
+    withdrawMessageLabel = new QLabel(withdrawWindow);
+    withdrawMessageLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    withdrawMessageLabel->setText("Which account would you like to withdraw money from?");
+    withdrawMessageLabel->setGeometry(350,150,270,30);
 
-    savingsButton = new QPushButton("Savings", withdrawWindow);
-    savingsButton->setGeometry(75,300,120,30);
-    connect(savingsButton, SIGNAL (pressed()), this, SLOT (depositSavingsWindow()));
+    withdrawSavingsButton = new QPushButton("Savings", withdrawWindow);
+    withdrawSavingsButton->setGeometry(75,300,120,30);
+    connect(withdrawSavingsButton, SIGNAL (pressed()), this, SLOT (withdrawSavingsButtonWindow()));
 
-    checkingsButton = new QPushButton("Checkings", withdrawWindow);
-    checkingsButton->setGeometry(800,300,120,30);
-    connect(checkingsButton, SIGNAL (pressed()), this, SLOT (depositCheckingsWindow()));
+    withdrawCheckingsButton = new QPushButton("Checkings", withdrawWindow);
+    withdrawCheckingsButton->setGeometry(800,300,120,30);
+    connect(withdrawCheckingsButton, SIGNAL (pressed()), this, SLOT (withdrawCheckingsButtonWindow()));
 
     okButton = new QPushButton("OK", withdrawWindow);
     okButton->setGeometry(450,400,60,30);
@@ -185,8 +184,7 @@ void Window::withdrawWindow()
     withdrawWindow->show();
 }
 
-
-void Window::withdrawCheckingsWindow()
+void Window::withdrawCheckingsButtonWindow()
 {
     QWidget * withdrawCheckingsWindow = new QWidget;
     withdrawCheckingsWindow->setFixedSize(1000,500);
@@ -198,7 +196,7 @@ void Window::withdrawCheckingsWindow()
     withdrawCheckingsWindow->show();
 }
 
-void Window::withdrawSavingsWindow()
+void Window::withdrawSavingsButtonWindow()
 {
     QWidget * withdrawSavingsWindow = new QWidget;
     withdrawSavingsWindow->setFixedSize(1000,500);
@@ -210,7 +208,7 @@ void Window::withdrawSavingsWindow()
     withdrawSavingsWindow->show();
 }
 
-void Window::transferWindow()
+void Window::transferButtonWindow()
 {
     QWidget * transferWindow = new QWidget;
     transferWindow->setFixedSize(1000,500);
@@ -222,7 +220,7 @@ void Window::transferWindow()
     transferWindow->show();
 }
 
-void Window::historyWindow()
+void Window::historyButtonWindow()
 {
     QWidget * historyWindow = new QWidget;
     historyWindow->setFixedSize(1000,500);
