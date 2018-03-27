@@ -6,8 +6,11 @@
 #include <QPUshButton>
 #include <QLabel>
 #include <QString>
+#include <QVector>
+#include <QInputDialog>
 #include "user.h"
-
+#include "checkingaccount.h"
+#include "savingsaccount.h"
 
 class QPushButton;
 class Window : public QMainWindow
@@ -17,6 +20,8 @@ public:
     explicit Window(QWidget *parent = nullptr);
 
 private:
+    QVector<double> savingsTransaction;
+    QVector<double> checkingsTransaction;
 
     // PushButton objects
     QPushButton * checkingsButton;
@@ -27,32 +32,48 @@ private:
     QPushButton * okButton;
     QPushButton * savingsButton;
     QPushButton * transferButton;
+    QPushButton * transferCheckingsToSavings;
+    QPushButton * transferSavingsToCheckings;
     QPushButton * withdrawButton;
     QPushButton * withdrawSavingsButton;
     QPushButton * withdrawCheckingsButton;
 
     // QLabel objects
-    QLabel * accountNumberLabel;
-    QLabel * accountNumberDisplay;
-    QLabel * balanceLabel;
-    QLabel * balanceDisplay;
+    QLabel * checkingAccountNumberLabel;
+    QLabel * checkingAccountNumberDisplay;
+    QLabel * checkingBalanceLabel;
+    QLabel * checkingBalanceDisplay;
     QLabel * depositMessageLabel;
+    QLabel * depositAmountLabel;
+    QLabel * savingsAccountLabel;
+    QLabel * savingsAccountDisplay;
+    QLabel * savingsBalanceDisplay;
+    QLabel * savingsBalanceLabel;
+    QLabel * transferLabel;
     QLabel * userNameDisplay;
     QLabel * userNameLabel;
     QLabel * withdrawMessageLabel;
+    QLabel * historyLabel;
+    QLabel * savingsHistoryLabel;
+    QLabel * checkingsHistoryLabel;
 
+    // Objects
     User user;
+    CheckingAccount checkings;
+    SavingsAccount savings;
 
 
 private slots:
     void savingsButtonWindow();
     void checkingsButtonWindow();
+    void checkingsToSavingsTransfer();
+    void savingsToCheckingsTransfer();
     void depositButtonWindow();
-    void depositSavingsButtonWindow();
-    void depositCheckingsButtonWindow();
+    void depositIntoSavings();
+    void depositIntoCheckings();
     void withdrawButtonWindow();
-    void withdrawCheckingsButtonWindow();
-    void withdrawSavingsButtonWindow();
+    void withdrawFromCheckings();
+    void withdrawFromSavings();
     void transferButtonWindow();
     void historyButtonWindow();
 

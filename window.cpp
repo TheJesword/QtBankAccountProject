@@ -4,8 +4,6 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
 {
 
     QString userName = "Heck Yeah";
-   // unsigned int accountNumber = 0;
-   // double balance = 0;
 
     setFixedSize(1000,500);
 
@@ -14,23 +12,12 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
     userNameLabel = new QLabel(this);
     userNameLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     userNameLabel->setText("User Name:");
-    userNameLabel->setGeometry(375,70,100,30);
-
-    accountNumberLabel = new QLabel(this);
-    accountNumberLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    accountNumberLabel->setText("Account Number:");
-    accountNumberLabel->setGeometry(375,100,100,30);
+    userNameLabel->setGeometry(375,100,100,30);
 
     userNameDisplay = new QLabel(this);
     userNameDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     userNameDisplay->setText(userName);
-    userNameDisplay->setGeometry(480,70,100,30);
-
-    accountNumberDisplay = new QLabel(this);
-    accountNumberDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    accountNumberDisplay->setText(QString::number(user.getCheckingAccountNumber()));
-    accountNumberDisplay->setGeometry(480,100,100,30);
-
+    userNameDisplay->setGeometry(480,100,100,30);
 
     //----------- Push buttons objects on Main Window ------------------
     savingsButton = new QPushButton("Savings Account", this);
@@ -70,26 +57,29 @@ void Window::savingsButtonWindow()
   QWidget * savingsWindow = new QWidget;
   savingsWindow->setFixedSize(1000,500);
 
-  balanceLabel = new QLabel(savingsWindow);
-  balanceLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  balanceLabel->setText("Balance:");
-  balanceLabel->setGeometry(375,130,100,30);
+  savingsAccountLabel = new QLabel(savingsWindow);
+  savingsAccountLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  savingsAccountLabel->setText("Savings Account Number:");
+  savingsAccountLabel->setGeometry(350,100,140,30);
 
+  savingsBalanceLabel = new QLabel(savingsWindow);
+  savingsBalanceLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  savingsBalanceLabel->setText("Balance:");
+  savingsBalanceLabel->setGeometry(375,130,100,30);
 
-  balanceDisplay = new QLabel(savingsWindow);
-  balanceDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  balanceDisplay->setText("$$$");
-  balanceDisplay->setGeometry(490,130,100,30);
+  savingsAccountDisplay = new QLabel(savingsWindow);
+  savingsAccountDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  savingsAccountDisplay->setText(QString::number(user.getSavingsAccountNumber()));
+  savingsAccountDisplay->setGeometry(500,100,100,30);
 
-
-  // have to fix the display balance later
-  //balanceDisplay->setText(QString::number(balance));
+  savingsBalanceDisplay = new QLabel(savingsWindow);
+  savingsBalanceDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  savingsBalanceDisplay->setText(QString::number(savings.getSavingsBalance()));
+  savingsBalanceDisplay->setGeometry(490,130,100,30);
 
   okButton = new QPushButton("OK", savingsWindow);
   okButton->setGeometry(450,400,60,30);
   connect(okButton, SIGNAL (pressed()), savingsWindow, SLOT (close()));
-
-  // display info
 
   savingsWindow->show();
 }
@@ -99,6 +89,26 @@ void Window::checkingsButtonWindow()
     // Creating the new window
   QWidget * checkingsWindow = new QWidget;
   checkingsWindow->setFixedSize(1000,500);
+
+  checkingAccountNumberLabel = new QLabel(checkingsWindow);
+  checkingAccountNumberLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  checkingAccountNumberLabel->setText("Checking Account Number:");
+  checkingAccountNumberLabel->setGeometry(350,100,140,30);
+
+  checkingBalanceLabel = new QLabel(checkingsWindow);
+  checkingBalanceLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  checkingBalanceLabel->setText("Balance:");
+  checkingBalanceLabel->setGeometry(375,150,100,30);
+
+  checkingAccountNumberDisplay = new QLabel(checkingsWindow);
+  checkingAccountNumberDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  checkingAccountNumberDisplay->setText(QString::number(user.getCheckingAccountNumber()));
+  checkingAccountNumberDisplay->setGeometry(500,100,100,30);
+
+  checkingBalanceDisplay = new QLabel(checkingsWindow);
+  checkingBalanceDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  checkingBalanceDisplay->setText(QString::number(checkings.getCheckingBalance()));
+  checkingBalanceDisplay->setGeometry(490,150,100,30);
 
   okButton = new QPushButton("OK", checkingsWindow);
   okButton->setGeometry(450,400,60,30);
@@ -121,11 +131,13 @@ void Window::depositButtonWindow()
 
   depositSavingsButton = new QPushButton("Savings", depositWindow);
   depositSavingsButton->setGeometry(75,300,120,30);
-  connect(depositSavingsButton, SIGNAL (pressed()), this, SLOT (depositSavingsButtonWindow()));
+  connect(depositSavingsButton, SIGNAL (pressed()), this, SLOT (depositIntoSavings()));
+  connect(depositSavingsButton, SIGNAL (pressed()), depositWindow, SLOT (close()));
 
   depositCheckingsButton = new QPushButton("Checkings", depositWindow);
   depositCheckingsButton->setGeometry(800,300,120,30);
-  connect(depositCheckingsButton, SIGNAL (pressed()), this, SLOT (depositCheckingsButtonWindow()));
+  connect(depositCheckingsButton, SIGNAL (pressed()), this, SLOT (depositIntoCheckings()));
+  connect(depositCheckingsButton, SIGNAL (pressed()), depositWindow, SLOT (close()));
 
   okButton = new QPushButton("OK", depositWindow);
   okButton->setGeometry(450,400,60,30);
@@ -134,29 +146,36 @@ void Window::depositButtonWindow()
   depositWindow->show();
 }
 
-void Window::depositSavingsButtonWindow()
+void Window::depositIntoSavings()
 {
-    // Creating the new window
-  QWidget * depositSavingsWindow = new QWidget;
-  depositSavingsWindow->setFixedSize(1000,500);
-
-  okButton = new QPushButton("OK", depositSavingsWindow);
-  okButton->setGeometry(450,400,60,30);
-  connect(okButton, SIGNAL (pressed()), depositSavingsWindow, SLOT (close()));
-
-  depositSavingsWindow->show();
+    // bool ok is for the window that opens up to get the user input
+    // once pressed okay it will save the data and go through the functions
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
+                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+      {
+          // setting the amount be dosposited to be saving the amounts entered
+          // into the savings vector for history
+          savings.setDeposit(userInput);
+          savings.saveTransaction(savingsTransaction,userInput);
+      }
 }
 
-void Window::depositCheckingsButtonWindow()
+void Window::depositIntoCheckings()
 {
-    QWidget * depositCheckingsWindow = new QWidget;
-    depositCheckingsWindow->setFixedSize(1000,500);
-
-    okButton = new QPushButton("OK", depositCheckingsWindow);
-    okButton->setGeometry(450,400,60,30);
-    connect(okButton, SIGNAL (pressed()), depositCheckingsWindow, SLOT (close()));
-
-    depositCheckingsWindow->show();
+    // bool ok is for the window that opens up to get the user input
+    // once pressed okay it will save the data and go through the functions
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
+                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+      {
+          // setting the amount be dosposited to be saving the amounts entered
+          // into the checkings vector for history
+          checkings.setDeposit(userInput);
+          checkings.saveTransaction(checkingsTransaction,userInput);
+      }
 }
 
 void Window::withdrawButtonWindow()
@@ -171,11 +190,13 @@ void Window::withdrawButtonWindow()
 
     withdrawSavingsButton = new QPushButton("Savings", withdrawWindow);
     withdrawSavingsButton->setGeometry(75,300,120,30);
-    connect(withdrawSavingsButton, SIGNAL (pressed()), this, SLOT (withdrawSavingsButtonWindow()));
+    connect(withdrawSavingsButton, SIGNAL (pressed()), this, SLOT (withdrawFromSavings()));
+    connect(withdrawSavingsButton, SIGNAL (pressed()), withdrawWindow, SLOT (close()));
 
     withdrawCheckingsButton = new QPushButton("Checkings", withdrawWindow);
     withdrawCheckingsButton->setGeometry(800,300,120,30);
-    connect(withdrawCheckingsButton, SIGNAL (pressed()), this, SLOT (withdrawCheckingsButtonWindow()));
+    connect(withdrawCheckingsButton, SIGNAL (pressed()), this, SLOT (withdrawFromCheckings()));
+    connect(withdrawCheckingsButton, SIGNAL (pressed()), withdrawWindow, SLOT (close()));
 
     okButton = new QPushButton("OK", withdrawWindow);
     okButton->setGeometry(450,400,60,30);
@@ -184,34 +205,60 @@ void Window::withdrawButtonWindow()
     withdrawWindow->show();
 }
 
-void Window::withdrawCheckingsButtonWindow()
+void Window::withdrawFromCheckings()
 {
-    QWidget * withdrawCheckingsWindow = new QWidget;
-    withdrawCheckingsWindow->setFixedSize(1000,500);
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
+                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+      {
+          checkings.setWithdraw(userInput);
 
-    okButton = new QPushButton("OK", withdrawCheckingsWindow);
-    okButton->setGeometry(450,400,60,30);
-    connect(okButton, SIGNAL (pressed()), withdrawCheckingsWindow, SLOT (close()));
-
-    withdrawCheckingsWindow->show();
+          // creating a temp variable to make the input negative so
+          // it will be displayed as a negative number when in the history window
+          double temp;
+          temp = (userInput - userInput) - userInput;
+          checkings.saveTransaction(checkingsTransaction,temp);
+      }
 }
 
-void Window::withdrawSavingsButtonWindow()
+void Window::withdrawFromSavings()
 {
-    QWidget * withdrawSavingsWindow = new QWidget;
-    withdrawSavingsWindow->setFixedSize(1000,500);
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
+                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+      {
+          savings.setWithdraw(userInput);
 
-    okButton = new QPushButton("OK", withdrawSavingsWindow);
-    okButton->setGeometry(450,400,60,30);
-    connect(okButton, SIGNAL (pressed()), withdrawSavingsWindow, SLOT (close()));
-
-    withdrawSavingsWindow->show();
+          // creating a temp variable to make the input negative so
+          // it will be displayed as a negative number when in the history window
+          double temp;
+          temp = (userInput - userInput) - userInput;
+          savings.saveTransaction(savingsTransaction,temp);
+      }
 }
 
 void Window::transferButtonWindow()
 {
     QWidget * transferWindow = new QWidget;
     transferWindow->setFixedSize(1000,500);
+
+    transferLabel = new QLabel(transferWindow);
+    transferLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    transferLabel->setText("Choose an Account to transfer from:");
+    transferLabel->setGeometry(350,150,200,30);
+
+    transferCheckingsToSavings = new QPushButton("Checkings to Savings", transferWindow);
+    transferCheckingsToSavings->setGeometry(400,300,120,30);
+    connect(transferCheckingsToSavings, SIGNAL (pressed()), this, SLOT (checkingsToSavingsTransfer()));
+    connect(transferCheckingsToSavings, SIGNAL (pressed()), transferWindow, SLOT (close()));
+
+    transferSavingsToCheckings = new QPushButton("Savings to Checkings", transferWindow);
+    transferSavingsToCheckings->setGeometry(400,250,120,30);
+    connect(transferSavingsToCheckings, SIGNAL (pressed()), this, SLOT (savingsToCheckingsTransfer()));
+    connect(transferSavingsToCheckings, SIGNAL (pressed()), transferWindow, SLOT (close()));
+
 
     okButton = new QPushButton("OK", transferWindow);
     okButton->setGeometry(450,400,60,30);
@@ -220,10 +267,88 @@ void Window::transferButtonWindow()
     transferWindow->show();
 }
 
+void Window::checkingsToSavingsTransfer()
+{
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
+                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+      {
+          // for transfering funds we just call both of the opposite functions at the same
+          // time. Using the amount entered for withdraw from one and deposit to another
+          savings.setDeposit(userInput);
+          savings.saveTransaction(savingsTransaction,userInput);
+
+          double temp;
+          temp = (userInput - userInput) - userInput;
+          checkings.saveTransaction(checkingsTransaction,temp);
+          checkings.setWithdraw(userInput);
+
+      }
+}
+
+void Window::savingsToCheckingsTransfer()
+{
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
+                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+      {
+          // for transfering funds we just call both of the opposite functions at the same
+          // time. Using the amount entered for withdraw from one and deposit to another
+            checkings.setDeposit(userInput);
+            checkings.saveTransaction(checkingsTransaction,userInput);
+
+            double temp;
+            temp = (userInput - userInput) - userInput;
+            savings.saveTransaction(savingsTransaction,temp);
+            savings.setWithdraw(userInput);
+      }
+}
+
 void Window::historyButtonWindow()
 {
     QWidget * historyWindow = new QWidget;
     historyWindow->setFixedSize(1000,500);
+
+    historyLabel = new QLabel(historyWindow);
+    historyLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    historyLabel->setText("Transaction History: ");
+    historyLabel->setGeometry(400,100,120,30);
+
+    savingsHistoryLabel = new QLabel(historyWindow);
+    savingsHistoryLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    savingsHistoryLabel->setText("Savings: ");
+    savingsHistoryLabel->setGeometry(150,150,120,30);
+
+    checkingsHistoryLabel = new QLabel(historyWindow);
+    checkingsHistoryLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    checkingsHistoryLabel->setText("Checkings: ");
+    checkingsHistoryLabel->setGeometry(750,150,120,30);
+
+    // Creating a variable to move the label down in pixels
+    // everytime it goes through the loop creating a new label
+    int moveDownSavings = 200;
+    for (int i = 0; i < savingsTransaction.size(); i++)
+    {
+        QLabel * savTransactionLabel = new QLabel(historyWindow);
+        savTransactionLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        savTransactionLabel->setText(QString::number(savingsTransaction[i]));
+        savTransactionLabel->setGeometry(150,moveDownSavings,120,30);
+        moveDownSavings = moveDownSavings + 40;
+    }
+
+    // Creating a variable to move the label down in pixels
+    // everytime it goes through the loop creating a new label
+    int moveDownCheckings = 200;
+    for (int i = 0; i < checkingsTransaction.size(); i++)
+    {
+        QLabel * checkTransactionLabel = new QLabel(historyWindow);
+        checkTransactionLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        checkTransactionLabel->setText(QString::number(checkingsTransaction[i]));
+        checkTransactionLabel->setGeometry(750,moveDownCheckings,120,30);
+        moveDownCheckings = moveDownCheckings + 40;
+    }
 
     okButton = new QPushButton("OK", historyWindow);
     okButton->setGeometry(450,400,60,30);

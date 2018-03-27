@@ -1,19 +1,24 @@
-/*
+
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
+#include <QVector>
 
 class Account
 {
 protected:
-    double balance;
+    double amount;
+    QVector<double> transaction;
 public:
 
-    virtual void setDeposit(double balance) = 0;
+    Account();
+    virtual void setDeposit(double amount) = 0;
     virtual double getDeposit() = 0;
-    virtual void setWithdraw(double balance) = 0;
+    virtual void setWithdraw(double amount) = 0;
     virtual double getWithdraw() = 0;
+    virtual void saveTransaction(QVector<double>& transactions, double amount) = 0;
+    ~Account();
 
 };
 
 #endif // ACCOUNT_H
-*/
+
