@@ -8,6 +8,7 @@ class CheckingAccount : public Account
 private:
     double checkingBalance;
     double amount;
+    double overDraftFee;
     QVector<double> checkingsTransaction;
 public:
     CheckingAccount();

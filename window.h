@@ -3,7 +3,7 @@
 
 #include <QApplication>
 #include <QMainWindow>
-#include <QPUshButton>
+#include <QPushButton>
 #include <QLabel>
 #include <QString>
 #include <QVector>
@@ -22,6 +22,11 @@ public:
 private:
     QVector<double> savingsTransaction;
     QVector<double> checkingsTransaction;
+
+    // Objects
+    User user;
+    CheckingAccount checkings;
+    SavingsAccount savings;
 
     // PushButton objects
     QPushButton * checkingsButton;
@@ -56,12 +61,6 @@ private:
     QLabel * historyLabel;
     QLabel * savingsHistoryLabel;
     QLabel * checkingsHistoryLabel;
-
-    // Objects
-    User user;
-    CheckingAccount checkings;
-    SavingsAccount savings;
-
 
 private slots:
     void savingsButtonWindow();

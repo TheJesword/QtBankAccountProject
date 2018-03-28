@@ -36,7 +36,7 @@ double CheckingAccount::getCheckingBalance()
 void CheckingAccount::saveTransaction(QVector<double>& checkingsTransaction, double amount)
 {
     this->amount = amount;
-    checkingsTransaction.push_back(amount);
+    checkingsTransaction.push_front(amount);
 }
 
 CheckingAccount::~CheckingAccount()

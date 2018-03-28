@@ -35,7 +35,7 @@ double SavingsAccount::getSavingsBalance()
 void SavingsAccount::saveTransaction(QVector<double>& savingsTransaction, double amount)
 {
     this->amount = amount;
-    savingsTransaction.push_back(amount);
+    savingsTransaction.push_front(amount);
 }
 
 SavingsAccount::~SavingsAccount()

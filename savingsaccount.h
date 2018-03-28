@@ -8,6 +8,7 @@ class SavingsAccount : public Account
 private:
     double savingsBalance;
     double amount;
+    double interestRate;
     QVector<double> savingsTransaction;
 public:
     SavingsAccount();

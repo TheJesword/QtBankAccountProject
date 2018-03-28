@@ -150,16 +150,42 @@ void Window::depositIntoSavings()
 {
     // bool ok is for the window that opens up to get the user input
     // once pressed okay it will save the data and go through the functions
-    bool ok;
-      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
-                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+
+      bool ok;
+        double userInput = QInputDialog::getDouble(this, tr("  *Savings*"),
+                                             tr("Enter Deposit Amount:"), 0.0, -1000000, 1000000, 2, &ok);
       if (ok)
       {
-          // setting the amount be dosposited to be saving the amounts entered
-          // into the savings vector for history
-          savings.setDeposit(userInput);
-          savings.saveTransaction(savingsTransaction,userInput);
+          if (userInput >= 0)
+          {
+              // setting the amount be dosposited to be saving the amounts entered
+              // into the savings vector for history
+              savings.setDeposit(userInput);
+              savings.saveTransaction(savingsTransaction,userInput);
+              depositButtonWindow();
+          }
+          else
+          {
+              QWidget * errorWindow = new QWidget;
+              errorWindow->setFixedSize(300,250);
+
+              QLabel * errorMessage = new QLabel(errorWindow);
+              errorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+              errorMessage->setText("You cannot deposit a negative number.");
+              errorMessage->setGeometry(50,80,210,30);
+
+              okButton = new QPushButton("OK", errorWindow);
+              okButton->setGeometry(110,180,60,30);
+              connect(okButton, SIGNAL (pressed()), errorWindow, SLOT (close()));
+              depositButtonWindow();
+              errorWindow->show();
+           }
       }
+      else
+      {
+           depositButtonWindow();
+      }
+
 }
 
 void Window::depositIntoCheckings()
@@ -167,15 +193,40 @@ void Window::depositIntoCheckings()
     // bool ok is for the window that opens up to get the user input
     // once pressed okay it will save the data and go through the functions
     bool ok;
-      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
-                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      double userInput = QInputDialog::getDouble(this, tr("*  Checkings*"),
+                                         tr("Enter Deposit Amount:"), 0.0, -1000000, 1000000, 2, &ok);
       if (ok)
       {
-          // setting the amount be dosposited to be saving the amounts entered
-          // into the checkings vector for history
-          checkings.setDeposit(userInput);
-          checkings.saveTransaction(checkingsTransaction,userInput);
+          if (userInput >= 0)
+          {
+              // setting the amount be dosposited to be saving the amounts entered
+              // into the checkings vector for history
+              checkings.setDeposit(userInput);
+              checkings.saveTransaction(checkingsTransaction,userInput);
+              depositButtonWindow();
+          }
+          else
+          {
+              QWidget * errorWindow = new QWidget;
+              errorWindow->setFixedSize(300,250);
+
+              QLabel * errorMessage = new QLabel(errorWindow);
+              errorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+              errorMessage->setText("You cannot deposit a negative number.");
+              errorMessage->setGeometry(50,80,210,30);
+
+              okButton = new QPushButton("OK", errorWindow);
+              okButton->setGeometry(110,180,60,30);
+              connect(okButton, SIGNAL (pressed()), errorWindow, SLOT (close()));
+              depositButtonWindow();
+              errorWindow->show();
+           }
       }
+      else
+      {
+           depositButtonWindow();
+      }
+
 }
 
 void Window::withdrawButtonWindow()
@@ -208,35 +259,105 @@ void Window::withdrawButtonWindow()
 void Window::withdrawFromCheckings()
 {
     bool ok;
-      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
-                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      double userInput = QInputDialog::getDouble(this, tr("  *Checkings*"),
+                                             tr("Enter Withdraw Amount:"), 0.0, -1000000, 1000000, 2, &ok);
       if (ok)
-      {
-          checkings.setWithdraw(userInput);
+          {
+             if (userInput >= 0)
+            {
+               checkings.setWithdraw(userInput);
 
-          // creating a temp variable to make the input negative so
-          // it will be displayed as a negative number when in the history window
-          double temp;
-          temp = (userInput - userInput) - userInput;
-          checkings.saveTransaction(checkingsTransaction,temp);
-      }
+              // creating a temp variable to make the input negative so
+              // it will be displayed as a negative number when in the history window
+               double temp;
+               temp = (userInput - userInput) - userInput;
+               checkings.saveTransaction(checkingsTransaction,temp);
+               withdrawButtonWindow();
+            }
+            else
+            {
+               QWidget * errorWindow = new QWidget;
+               errorWindow->setFixedSize(300,250);
+
+               QLabel * errorMessage = new QLabel(errorWindow);
+               errorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+               errorMessage->setText("You cannot withdraw a negative number.");
+               errorMessage->setGeometry(50,80,210,30);
+
+               okButton = new QPushButton("OK", errorWindow);
+               okButton->setGeometry(110,180,60,30);
+               connect(okButton, SIGNAL (pressed()), errorWindow, SLOT (close()));
+               withdrawButtonWindow();
+               errorWindow->show();
+             }
+          }
+          else
+          {
+              withdrawButtonWindow();
+          }
 }
 
 void Window::withdrawFromSavings()
 {
-    bool ok;
-      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
-                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
-      if (ok)
-      {
-          savings.setWithdraw(userInput);
 
-          // creating a temp variable to make the input negative so
-          // it will be displayed as a negative number when in the history window
-          double temp;
-          temp = (userInput - userInput) - userInput;
-          savings.saveTransaction(savingsTransaction,temp);
-      }
+    bool ok;
+      double userInput = QInputDialog::getDouble(this, tr("  *Savings*"),
+                                             tr("Enter Withdraw Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      if (ok)
+       {
+          if (userInput >= 0)
+           {
+              if(savings.getSavingsBalance() > userInput)
+               {
+                    savings.setWithdraw(userInput);
+
+                  // creating a temp variable to make the input negative so
+                  // it will be displayed as a negative number when in the history window
+                    double temp;
+                    temp = (userInput - userInput) - userInput;
+                    savings.saveTransaction(savingsTransaction,temp);
+                    withdrawButtonWindow();
+               }
+               else
+                {
+                    QWidget * SavingsErrorWindow = new QWidget;
+                    SavingsErrorWindow->setFixedSize(300,250);
+
+                    QLabel * SavingsErrorMessage = new QLabel(SavingsErrorWindow);
+                    SavingsErrorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    SavingsErrorMessage->setText("You do not have enough to withdraw that much.");
+                    SavingsErrorMessage->setGeometry(30,80,250,30);
+
+                    okButton = new QPushButton("OK", SavingsErrorWindow);
+                    okButton->setGeometry(110,180,60,30);
+                    connect(okButton, SIGNAL (pressed()), SavingsErrorWindow, SLOT (close()));
+                    withdrawButtonWindow();
+                    SavingsErrorWindow->show();
+                }
+
+           }
+            else
+             {
+                QWidget * errorWindow = new QWidget;
+                errorWindow->setFixedSize(300,250);
+
+                QLabel * errorMessage = new QLabel(errorWindow);
+                errorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                errorMessage->setText("You cannot withdraw a negative number.");
+                errorMessage->setGeometry(50,80,210,30);
+
+                okButton = new QPushButton("OK", errorWindow);
+                okButton->setGeometry(110,180,60,30);
+                connect(okButton, SIGNAL (pressed()), errorWindow, SLOT (close()));
+                withdrawButtonWindow();
+                errorWindow->show();
+            }
+          }
+          else
+          {
+              withdrawButtonWindow();
+          }
+
 }
 
 void Window::transferButtonWindow()
@@ -247,7 +368,7 @@ void Window::transferButtonWindow()
     transferLabel = new QLabel(transferWindow);
     transferLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     transferLabel->setText("Choose an Account to transfer from:");
-    transferLabel->setGeometry(350,150,200,30);
+    transferLabel->setGeometry(370,150,200,30);
 
     transferCheckingsToSavings = new QPushButton("Checkings to Savings", transferWindow);
     transferCheckingsToSavings->setGeometry(400,300,120,30);
@@ -261,7 +382,7 @@ void Window::transferButtonWindow()
 
 
     okButton = new QPushButton("OK", transferWindow);
-    okButton->setGeometry(450,400,60,30);
+    okButton->setGeometry(430,400,60,30);
     connect(okButton, SIGNAL (pressed()), transferWindow, SLOT (close()));
 
     transferWindow->show();
@@ -270,39 +391,127 @@ void Window::transferButtonWindow()
 void Window::checkingsToSavingsTransfer()
 {
     bool ok;
-      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
-                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      double userInput = QInputDialog::getDouble(this, tr("  *Transfer*"),
+                                         tr("Checkings To Savings:"), 0.0, -1000000, 1000000, 2, &ok);
       if (ok)
       {
-          // for transfering funds we just call both of the opposite functions at the same
-          // time. Using the amount entered for withdraw from one and deposit to another
-          savings.setDeposit(userInput);
-          savings.saveTransaction(savingsTransaction,userInput);
+          if (userInput >= 0)
+          {
+              if(checkings.getCheckingBalance() > userInput)
+              {
+                  // setting the amount be dosposited to be saving the amounts entered
+                  // into the checkings vector for history
+                  checkings.setWithdraw(userInput);
+                  savings.setDeposit(userInput);
+                  savings.saveTransaction(savingsTransaction, userInput);
 
-          double temp;
-          temp = (userInput - userInput) - userInput;
-          checkings.saveTransaction(checkingsTransaction,temp);
-          checkings.setWithdraw(userInput);
+                  double temp;
+                  temp = (userInput - userInput) - userInput;
+                  checkings.saveTransaction(checkingsTransaction,temp);
+                  transferButtonWindow();
+              }
+              else
+              {
+                  QWidget * transferErrorWindow = new QWidget;
+                  transferErrorWindow->setFixedSize(300,250);
 
+                  QLabel * transferErrorMessage = new QLabel(transferErrorWindow);
+                  transferErrorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                  transferErrorMessage->setText("You do not have enough to transfer that much.");
+                  transferErrorMessage->setGeometry(30,80,250,30);
+
+                  okButton = new QPushButton("OK", transferErrorWindow);
+                  okButton->setGeometry(110,180,60,30);
+                  connect(okButton, SIGNAL (pressed()), transferErrorWindow, SLOT (close()));
+                  transferButtonWindow();
+                  transferErrorWindow->show();
+              }
+
+          }
+          else
+          {
+              QWidget * errorWindow = new QWidget;
+              errorWindow->setFixedSize(300,250);
+
+              QLabel * errorMessage = new QLabel(errorWindow);
+              errorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+              errorMessage->setText("You cannot Transfer a negative number.");
+              errorMessage->setGeometry(50,80,210,30);
+
+              okButton = new QPushButton("OK", errorWindow);
+              okButton->setGeometry(110,180,60,30);
+              connect(okButton, SIGNAL (pressed()), errorWindow, SLOT (close()));
+              transferButtonWindow();
+              errorWindow->show();
+           }
+      }
+      else
+      {
+           transferButtonWindow();
       }
 }
 
 void Window::savingsToCheckingsTransfer()
 {
     bool ok;
-      double userInput = QInputDialog::getDouble(this, tr("Enter Deposit Amount"),
-                                         tr("Amount:"), 0.0, -1000000, 1000000, 2, &ok);
+      double userInput = QInputDialog::getDouble(this, tr("  *Transfer*"),
+                                         tr("Savings To Checkings:"), 0.0, -1000000, 1000000, 2, &ok);
       if (ok)
       {
-          // for transfering funds we just call both of the opposite functions at the same
-          // time. Using the amount entered for withdraw from one and deposit to another
-            checkings.setDeposit(userInput);
-            checkings.saveTransaction(checkingsTransaction,userInput);
+          if (userInput >= 0)
+          {
+              if(savings.getSavingsBalance() > userInput)
+              {
+                  // setting the amount be dosposited to be saving the amounts entered
+                  // into the checkings vector for history
 
-            double temp;
-            temp = (userInput - userInput) - userInput;
-            savings.saveTransaction(savingsTransaction,temp);
-            savings.setWithdraw(userInput);
+                  savings.setWithdraw(userInput);
+                  checkings.setDeposit(userInput);
+                  checkings.saveTransaction(checkingsTransaction, userInput);
+
+                  double temp;
+                  temp = (userInput - userInput) - userInput;
+                  savings.saveTransaction(savingsTransaction,temp);
+                  transferButtonWindow();
+              }
+              else
+              {
+                  QWidget * transferErrorWindow = new QWidget;
+                  transferErrorWindow->setFixedSize(300,250);
+
+                  QLabel * transferErrorMessage = new QLabel(transferErrorWindow);
+                  transferErrorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                  transferErrorMessage->setText("You do not have enough to transfer that much.");
+                  transferErrorMessage->setGeometry(30,80,250,30);
+
+                  okButton = new QPushButton("OK", transferErrorWindow);
+                  okButton->setGeometry(110,180,60,30);
+                  connect(okButton, SIGNAL (pressed()), transferErrorWindow, SLOT (close()));
+                  transferButtonWindow();
+                  transferErrorWindow->show();
+              }
+
+          }
+          else
+          {
+              QWidget * errorWindow = new QWidget;
+              errorWindow->setFixedSize(300,250);
+
+              QLabel * errorMessage = new QLabel(errorWindow);
+              errorMessage->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+              errorMessage->setText("You cannot Transfer a negative number.");
+              errorMessage->setGeometry(50,80,210,30);
+
+              okButton = new QPushButton("OK", errorWindow);
+              okButton->setGeometry(110,180,60,30);
+              connect(okButton, SIGNAL (pressed()), errorWindow, SLOT (close()));
+              transferButtonWindow();
+              errorWindow->show();
+           }
+      }
+      else
+      {
+           transferButtonWindow();
       }
 }
 
