@@ -2,13 +2,21 @@
 //#include <QTextEdit>
 
 #include "window.h"
+#include "login.h"
 
 int main (int argc, char **argv)
 {
     QApplication app(argc, argv);
+    QString userName;
+    QString password;
 
-    Window window;
-    window.show();
+    Login loginScreen;
+    loginScreen.show();
+
+    // while loop ?
+   // Window window;
+   // window.show();
+   // loginScreen.close();
 
     return app.exec();
     }

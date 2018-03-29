@@ -3,7 +3,7 @@
 Window::Window(QWidget *parent) : QMainWindow(parent)
 {
 
-    QString userName = "Heck Yeah";
+    //QString userName = "Heck Yeah";
 
     setFixedSize(1000,500);
 
@@ -16,7 +16,7 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
 
     userNameDisplay = new QLabel(this);
     userNameDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    userNameDisplay->setText(userName);
+    userNameDisplay->setText("user name goes here");
     userNameDisplay->setGeometry(480,100,100,30);
 
     //----------- Push buttons objects on Main Window ------------------
