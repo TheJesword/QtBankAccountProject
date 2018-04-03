@@ -24,7 +24,7 @@ public:
     bool checkUserNameAndPassword(QString userName, QString password);
 
 public slots:
-    void getInfoSlot();
+       //void getInfoSlot();
 };
 
 #endif // LOGIN_H

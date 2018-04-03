@@ -7,47 +7,94 @@ Window::Window(QWidget *parent) : QMainWindow(parent)
 
     setFixedSize(1000,500);
 
-     //----------- Labels objects ----------------------
+    QLabel * getInfo = new QLabel(this);
+    getInfo->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    getInfo->setText("Enter username and Password");
+    getInfo->setGeometry(400,100,175,30);
 
-    userNameLabel = new QLabel(this);
+    QPushButton * infoButton = new QPushButton("Login", this);
+    infoButton->setGeometry(430,300,120,30);
+    connect(infoButton, SIGNAL (pressed()), this, SLOT (getInfoSlot()));
+
+}
+
+
+void Window::getInfoSlot()
+{
+    QString userName;
+    QString password;
+
+    bool ok;
+       userName = QInputDialog::getText(this, tr("Login"),
+                                            tr("User name:"), QLineEdit::Normal,
+                                            QDir::home().dirName(), &ok);
+       if (ok && !userName.isEmpty())
+       {
+           login.setUserName(userName);
+           password = QInputDialog::getText(this, tr("Login"),
+                                                tr("Password:"), QLineEdit::Normal,
+                                                QDir::home().dirName(), &ok);
+           if (ok && !password.isEmpty())
+           {
+               login.setPassword(password);
+           }
+
+       }
+
+       if(login.checkUserNameAndPassword(userName, password))
+       {
+           close();
+           mainAccountWindow();
+       }
+}
+
+void Window::mainAccountWindow()
+{
+    QWidget * mainWindow = new QWidget;
+    mainWindow->setFixedSize(1000,500);
+
+//----------- Labels objects ----------------------
+
+    userNameLabel = new QLabel(mainWindow);
     userNameLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     userNameLabel->setText("User Name:");
     userNameLabel->setGeometry(375,100,100,30);
 
-    userNameDisplay = new QLabel(this);
+    userNameDisplay = new QLabel(mainWindow);
     userNameDisplay->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    userNameDisplay->setText("user name goes here");
+    userNameDisplay->setText(login.getUserName());
     userNameDisplay->setGeometry(480,100,100,30);
 
-    //----------- Push buttons objects on Main Window ------------------
-    savingsButton = new QPushButton("Savings Account", this);
+//----------- Push buttons objects on Main Window ------------------
+    savingsButton = new QPushButton("Savings Account", mainWindow);
     savingsButton->setGeometry(75,300,120,30);
     connect(savingsButton, SIGNAL (pressed()), this, SLOT (savingsButtonWindow()));
 
-    checkingsButton = new QPushButton("Checkings Account", this);
+    checkingsButton = new QPushButton("Checkings Account", mainWindow);
     checkingsButton->setGeometry(75,350,120,30);
     connect(checkingsButton, SIGNAL (pressed()), this, SLOT (checkingsButtonWindow()));
 
-    transferButton = new QPushButton("Transfer", this);
+    transferButton = new QPushButton("Transfer", mainWindow);
     transferButton->setGeometry(75,400,120,30);
     connect(transferButton, SIGNAL (pressed()), this, SLOT (transferButtonWindow()));
 
-    depositButton = new QPushButton("Deposit", this);
+    depositButton = new QPushButton("Deposit", mainWindow);
     depositButton->setGeometry(800,350,120,30);
     connect(depositButton, SIGNAL (pressed()), this, SLOT (depositButtonWindow()));
 
-    historyButton = new QPushButton("Transaction History", this);
+    historyButton = new QPushButton("Transaction History", mainWindow);
     historyButton->setGeometry(800,400,120,30);
     connect(historyButton, SIGNAL (pressed()), this, SLOT (historyButtonWindow()));
 
-    okButton = new QPushButton("Quit", this);
+    okButton = new QPushButton("Quit", mainWindow);
     okButton->setGeometry(450,400,60,30);
-    connect(okButton, SIGNAL (pressed()), this, SLOT (close()));
+    connect(okButton, SIGNAL (pressed()), mainWindow, SLOT (close()));
 
-    withdrawButton = new QPushButton("Withdraw", this);
+    withdrawButton = new QPushButton("Withdraw", mainWindow);
     withdrawButton->setGeometry(800,300,120,30);
     connect(withdrawButton, SIGNAL (pressed()), this, SLOT (withdrawButtonWindow()));
 
+    mainWindow->show();
 
 }
 
@@ -397,7 +444,7 @@ void Window::checkingsToSavingsTransfer()
       {
           if (userInput >= 0)
           {
-              if(checkings.getCheckingBalance() > userInput)
+              if(checkings.getCheckingBalance() >= userInput)
               {
                   // setting the amount be dosposited to be saving the amounts entered
                   // into the checkings vector for history
@@ -460,7 +507,7 @@ void Window::savingsToCheckingsTransfer()
       {
           if (userInput >= 0)
           {
-              if(savings.getSavingsBalance() > userInput)
+              if(savings.getSavingsBalance() >= userInput)
               {
                   // setting the amount be dosposited to be saving the amounts entered
                   // into the checkings vector for history

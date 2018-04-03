@@ -11,6 +11,7 @@
 #include "user.h"
 #include "checkingaccount.h"
 #include "savingsaccount.h"
+#include "login.h"
 
 class QPushButton;
 class Window : public QMainWindow
@@ -27,6 +28,7 @@ private:
     User user;
     CheckingAccount checkings;
     SavingsAccount savings;
+    Login login;
 
     // PushButton objects
     QPushButton * checkingsButton;
@@ -63,6 +65,8 @@ private:
     QLabel * checkingsHistoryLabel;
 
 private slots:
+    void getInfoSlot();
+    void mainAccountWindow();
     void savingsButtonWindow();
     void checkingsButtonWindow();
     void checkingsToSavingsTransfer();
@@ -75,6 +79,7 @@ private slots:
     void withdrawFromSavings();
     void transferButtonWindow();
     void historyButtonWindow();
+
 
 };
 
